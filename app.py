@@ -13,7 +13,7 @@ if os.path.exists(MODEL_PATH):
     with open(MODEL_PATH, 'rb') as f:
         model = pickle.load(f)
 
-# Embedded HTML & CSS for the UI
+# Embedded HTML & CSS for the UI (with animations added)
 HTML_TEMPLATE = """
 <!DOCTYPE html>
 <html lang="en">
@@ -43,6 +43,25 @@ HTML_TEMPLATE = """
             min-height: 100vh;
             padding: 2rem;
         }
+        
+        /* Animation Keyframes */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
         .container {
             background-color: var(--card-bg);
             max-width: 600px;
@@ -50,7 +69,10 @@ HTML_TEMPLATE = """
             padding: 2.5rem;
             border-radius: 16px;
             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            /* Apply Fade In Animation */
+            animation: fadeInUp 0.6s ease-out forwards;
         }
+        
         h2 {
             text-align: center;
             margin-bottom: 0.5rem;
@@ -74,18 +96,23 @@ HTML_TEMPLATE = """
             font-weight: 600;
             margin-bottom: 0.4rem;
             color: var(--text-main);
+            transition: color 0.3s ease;
         }
         input {
             padding: 0.75rem;
             border: 1px solid var(--border);
             border-radius: 8px;
             font-size: 1rem;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
         }
         input:focus {
             outline: none;
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.15);
+            transform: translateY(-2px);
+        }
+        input:focus + label {
+            color: var(--primary);
         }
         button {
             grid-column: span 2;
@@ -97,10 +124,17 @@ HTML_TEMPLATE = """
             font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
-            transition: background-color 0.2s ease;
+            transition: all 0.3s ease;
             margin-top: 1rem;
         }
-        button:hover { background-color: var(--primary-hover); }
+        button:hover { 
+            background-color: var(--primary-hover); 
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+        }
+        button:active {
+            transform: translateY(0);
+        }
         .result-box {
             grid-column: span 2;
             margin-top: 1.5rem;
@@ -112,6 +146,8 @@ HTML_TEMPLATE = """
             background-color: #e0e7ff;
             color: var(--primary);
             border: 1px solid #c7d2fe;
+            /* Apply pulse animation to result */
+            animation: pulse 0.5s ease-in-out;
         }
         .error-box {
             background-color: #fee2e2;
